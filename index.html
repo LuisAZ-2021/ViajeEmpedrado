@@ -50,22 +50,37 @@
         </div>
       </div>
     <script>
+        // Función para actualizar el progreso y guardar en localStorage
         function updateProgress() {
-        var checkboxes = document.querySelectorAll('input[type=checkbox]');
-        var checkedCount = 0;
-        for (var i = 0; i < checkboxes.length; i++) {
-            if (checkboxes[i].checked) {
-                checkedCount++;
+            var checkboxes = document.querySelectorAll('input[type=checkbox]');
+            var checkedCount = 0;
+            for (var i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i].checked) {
+                    checkedCount++;
+                    localStorage.setItem(checkboxes[i].id, 'checked');
+                } else {
+                    localStorage.removeItem(checkboxes[i].id);
+                }
+            }
+            var progress = document.getElementById('progress');
+            progress.style.width = ((checkedCount / checkboxes.length) * 100) + '%';
+            var progressText = document.querySelector('.progress-text');
+            progressText.textContent = Math.round((checkedCount / checkboxes.length) * 100) + '%';
+            if (checkedCount == checkboxes.length) {
+                alert('¡Completaste todos los checklist!');
             }
         }
-        var progress = document.getElementById('progress');
-        progress.style.width = ((checkedCount / checkboxes.length) * 100) + '%';
-        var progressText = document.querySelector('.progress-text');
-        progressText.textContent = Math.round((checkedCount / checkboxes.length) * 100) + '%';
-        if (checkedCount == checkboxes.length) {
-            alert('¡Completaste todos los checklist!');
+
+        // Función para cargar el estado de los checkboxes desde localStorage
+        window.onload = function() {
+            var checkboxes = document.querySelectorAll('input[type=checkbox]');
+            for (var i = 0; i < checkboxes.length; i++) {
+                if (localStorage.getItem(checkboxes[i].id) === 'checked') {
+                    checkboxes[i].checked = true;
+                }
+            }
+            updateProgress(); // Actualizar progreso al cargar la página
         }
-  }
     </script>
 </body>
 </html>
